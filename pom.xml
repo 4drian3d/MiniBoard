@@ -12,42 +12,38 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-	<repositories>
-		<repository>
-			<id>papermc</id>
-			<url>https://papermc.io/repo/repository/maven-public/</url>
-		</repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
+    <repositories>
+	  <repository>
+	    <id>papermc</id>
+	    <url>https://papermc.io/repo/repository/maven-public/</url>
+	  </repository>
     </repositories>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.destroystokyo.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>1.16.5-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
-	<build>
-		<finalName>MiniBoard-${project.version}</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <dependencies>
+	<dependency>
+	  <groupId>com.destroystokyo.paper</groupId>
+	  <artifactId>paper-api</artifactId>
+	  <version>1.16.5-R0.1-SNAPSHOT</version>
+	  <scope>provided</scope>
+	</dependency>
+    </dependencies>
+    <build>
+	<finalName>MiniBoard-${project.version}</finalName>
+	<resources>
+	  <resource>
+	    <directory>src/main/resources</directory>
+	    <filtering>true</filtering>
+	  </resource>
+	</resources>
+        <plugins>
+	  <plugin>
+	    <artifactId>maven-compiler-plugin</artifactId>
+	    <version>3.8.1</version>
+	    <configuration>
+		<source>${java.version}</source>
+		<target>${java.version}</target>
+	    </configuration>
+	  </plugin>
+        </plugins>
+      </build>
 </project>
