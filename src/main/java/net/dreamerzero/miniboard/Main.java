@@ -30,13 +30,7 @@ public class Main extends JavaPlugin implements Listener {
         }, 0, 20);
 		
 		Bukkit.getConsoleSender().sendMessage("<-------------->");
-		Bukkit.getConsoleSender().sendMessage(" ______  _       _ ______                       _ ");
-		Bukkit.getConsoleSender().sendMessage("|  ___ \(_)     (_|____  \                     | |");
-		Bukkit.getConsoleSender().sendMessage("| | _ | |_ ____  _ ____)  ) ___   ____  ____ _ | |");
-		Bukkit.getConsoleSender().sendMessage("| || || | |  _ \| |  __  ( / _ \ / _  |/ ___) || |");
-		Bukkit.getConsoleSender().sendMessage("| || || | | | | | | |__)  ) |_| ( ( | | |  ( (_| |");
-		Bukkit.getConsoleSender().sendMessage("|_||_||_|_|_| |_|_|______/ \___/ \_||_|_|   \____| By 4drian3d");
-		Bukkit.getConsoleSender().sendMessage("                                                  ");
+
 		Bukkit.getConsoleSender().sendMessage("<-------------->");
     }
 	
