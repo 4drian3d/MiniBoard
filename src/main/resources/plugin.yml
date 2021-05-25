@@ -1,4 +1,4 @@
-main: net.dreamerzero.miniboard.miniboard
+main: net.dreamerzero.miniboard.Main
 name: MiniBoard
 version: 1.0.0
 author: 4drian3d
