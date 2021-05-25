@@ -1,5 +1,5 @@
 main: net.dreamerzero.miniboard.Main
 name: MiniBoard
-version: 1.0.0
+version: ${project.version}
 author: 4drian3d
-api-version: 1.13
+api-version: 1.16
