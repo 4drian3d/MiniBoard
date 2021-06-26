@@ -29,7 +29,7 @@ public class Main extends JavaPlugin implements Listener {
             }
         }, 0, 20);
 		
-		Bukkit.getConsoleSender().sendMessage("<-------------->");
+		Bukkit.getConsoleSender().sendMessage("<-------------->\n");
 
 		Bukkit.getConsoleSender().sendMessage("<-------------->");
     }
