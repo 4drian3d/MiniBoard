@@ -19,7 +19,7 @@ public class Main extends JavaPlugin implements Listener {
 
 	private final Map<UUID, FastBoard> boards = new HashMap<>();
 	
-	public void onEnable(){
+	public void onEnable() {
 		getServer().getPluginManager().registerEvents(this, this);
 		
 		getLogger().info("<-------------->");
@@ -28,13 +28,13 @@ public class Main extends JavaPlugin implements Listener {
 		
 		getServer().getScheduler().runTaskTimer(this, () -> {
             for (FastBoard board : this.boards.values()) {
-                board.updateLines(
+				board.updateLines(
 					ChatColor.GRAY + "------------------",
 					ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "Perfil" + ChatColor.DARK_GRAY + "]",
 					ChatColor.GRAY + "------------------",
 				);
-            }
-        }, 0, 20);
+			}
+		}, 0, 20);
 	}
 	
 	public void onJoin(PlayerJoinEvent e) {
