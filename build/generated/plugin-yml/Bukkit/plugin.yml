@@ -1,0 +1,7 @@
+name: MiniBoard
+version: 1.0.0
+main: me.dreamerzero.miniboard.MiniBoard
+description: ScoreBoard with MiniMessage support
+authors:
+ - 4drian3d
+api-version: 1.18
