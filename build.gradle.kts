@@ -10,7 +10,9 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
-	compileOnly("com.github.MegavexNetwork.scoreboard-library:v1_18_R2:-SNAPSHOT")
+    compileOnly("com.github.MegavexNetwork.scoreboard-library:v1_18_R2:-SNAPSHOT")
+	compileOnly("com.github.MegavexNetwork.scoreboard-library:implementation:-SNAPSHOT")
+    compileOnly("org.spongepowered:configurate-hocon:4.1.2")
 }
 
 group = "me.dreamerzero.miniboard"
