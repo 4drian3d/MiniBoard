@@ -38,9 +38,12 @@ public final class MiniBoard extends JavaPlugin  {
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        this.formatType = this.getServer().getPluginManager().isPluginEnabled("miniplaceholders-paper")
-            ? FormatType.MINIPLACEHOLDERS
-            : FormatType.REGULAR;
+        if(this.getServer().getPluginManager().isPluginEnabled("miniplaceholders-paper")){
+            this.formatType = FormatType.MINIPLACEHOLDERS;
+            logToConsole("<gradient:red:dark_red>[MiniBoard]</gradient> <gradient:aqua:white>Hooked with MiniPlaceholders");
+        } else {
+            this.formatType = FormatType.REGULAR;
+        }
         this.manager = ScoreboardManager.scoreboardManager(this);
 
         this.getServer().getPluginManager().registerEvents(new JoinListener(this), this);
@@ -57,6 +60,7 @@ public final class MiniBoard extends JavaPlugin  {
         // This plugin only supports 1.18.2+ versions... brigadier already exists since 1.13
         Commodore commodore = CommodoreProvider.getCommodore(this);
         this.setCompletions(commodore, miniBoardCommand);
+        logToConsole("<gradient:red:dark_red>[MiniBoard]</gradient> <gradient:aqua:white>Corectly initializated");
     }
 
     private void setCompletions(Commodore commodore, PluginCommand command) {
@@ -100,5 +104,9 @@ public final class MiniBoard extends JavaPlugin  {
             this.getDataPath(),
             this.getSLF4JLogger()
         );
+    }
+
+    private void logToConsole(String string){
+        MiniMessage.miniMessage().deserialize(string);
     }
 }
