@@ -1,8 +1,9 @@
 package me.dreamerzero.miniboard.configuration;
 
 import java.nio.file.Path;
-import java.util.Set;
+import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
@@ -11,7 +12,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 public final class Configuration {
     private Configuration(){}
-    public static Config loadMainConfig(Path path, Logger logger){
+    public static Config loadMainConfig(@NotNull final Path path, @NotNull final Logger logger){
         Path configPath = path.resolve("config.conf");
         final HoconConfigurationLoader loader = HoconConfigurationLoader.builder()
             .defaultOptions(opts -> opts
@@ -36,10 +37,19 @@ public final class Configuration {
 
     @ConfigSerializable
     public static class Config {
-        private Set<String> lines;
-        private long updateInterval;
+        private String title = "<rainbow>Miniboard</rainbow>";
+        private List<String> lines = List.of(
+            "<green>This server is using MiniBoard",
+            "<gradient:#FF0000:white:red>||||||||||||||||</gradient>",
+            "<gradient:aqua:white>play.yourserver.com"
+        );
+        private long updateInterval = 100l;
 
-        public Set<String> lines(){
+        public String title() {
+            return this.title;
+        }
+
+        public List<String> lines(){
             return this.lines;
         }
 

@@ -1,6 +1,10 @@
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+
 plugins {
     java
 	id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 repositories {
@@ -10,9 +14,10 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
-    compileOnly("com.github.MegavexNetwork.scoreboard-library:v1_18_R2:-SNAPSHOT")
-	compileOnly("com.github.MegavexNetwork.scoreboard-library:implementation:-SNAPSHOT")
+    shadow("com.github.MegavexNetwork.scoreboard-library:v1_18_R2:-SNAPSHOT")
+	shadow("com.github.MegavexNetwork.scoreboard-library:implementation:-SNAPSHOT")
     compileOnly("org.spongepowered:configurate-hocon:4.1.2")
+    compileOnly("com.github.4drian3d:MiniPlaceholders:1.0.0")
 }
 
 group = "me.dreamerzero.miniboard"
@@ -22,10 +27,17 @@ description = "ScoreBoard with MiniMessage support"
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 bukkit {
-    main = "me.dreamerzero.miniboard.MiniBoard"
+    main = "$group.MiniBoard"
     apiVersion = "1.18"
     authors = listOf("4drian3d")
     version = version
+    libraries = listOf(
+        "org.spongepowered:configurate-hocon:4.1.2"
+    )
+    softDepend = listOf(
+        "MiniPlaceholders",
+        "ProtocolSupport"
+    )
 }
 
 tasks {
@@ -33,5 +45,19 @@ tasks {
         options.encoding = Charsets.UTF_8.name()
 
         options.release.set(17)
+    }
+    build {
+        dependsOn(shadowJar)
+    }
+    shadowJar {
+        dependsOn(getByName("relocateShadowJar") as ConfigureShadowRelocation)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        archiveFileName.set("MiniBoard.jar")
+        configurations = listOf(project.configurations.shadow.get())
+    }
+
+    create<ConfigureShadowRelocation>("relocateShadowJar") {
+        target = shadowJar.get()
+        prefix = "me.dreamerzero.miniboard.libs"
     }
 }
