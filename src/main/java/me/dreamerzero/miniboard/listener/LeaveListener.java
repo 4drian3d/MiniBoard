@@ -6,7 +6,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.dreamerzero.miniboard.MiniBoard;
 
-public class LeaveListener implements Listener {
+public final class LeaveListener implements Listener {
     private final MiniBoard plugin;
     public LeaveListener(MiniBoard plugin) {
         this.plugin = plugin;

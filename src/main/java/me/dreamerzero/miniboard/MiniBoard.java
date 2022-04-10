@@ -14,6 +14,7 @@ import me.dreamerzero.miniboard.configuration.Configuration;
 import me.dreamerzero.miniboard.enums.FormatType;
 import me.dreamerzero.miniboard.listener.JoinListener;
 import me.dreamerzero.miniboard.listener.LeaveListener;
+import me.dreamerzero.miniboard.listener.WorldChangeListener;
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -23,7 +24,7 @@ import net.megavex.scoreboardlibrary.exception.ScoreboardLibraryLoadException;
 
 public final class MiniBoard extends JavaPlugin  {
 	private ScoreboardManager manager;
-	private final Set<Score> scoreboards = new HashSet<>();
+	private final Set<PlayerScore> scoreboards = new HashSet<>();
 	private Configuration.Config configuration;
 	private FormatType formatType;
 
@@ -44,6 +45,7 @@ public final class MiniBoard extends JavaPlugin  {
 
 		this.getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new WorldChangeListener(this), this);
 
 		PluginCommand miniBoardCommand = this.getServer().getPluginCommand("miniboard");
 		miniBoardCommand.permissionMessage(MiniMessage.miniMessage()
@@ -61,7 +63,7 @@ public final class MiniBoard extends JavaPlugin  {
 		commodore.register(command,
 			LiteralArgumentBuilder.literal("miniboard")
 				.then(LiteralArgumentBuilder.literal("reload").build())
-				.then(LiteralArgumentBuilder.literal("enable").build())
+				.then(LiteralArgumentBuilder.literal("toggle").build())
 			.build()
 		);
 	}
@@ -72,9 +74,7 @@ public final class MiniBoard extends JavaPlugin  {
 
 	@Override
 	public void onDisable() {
-		for(Score score : this.scoreboards) {
-			score.destroy();
-		}
+		this.scoreboards.forEach(PlayerScore::destroy);
 		this.scoreboards.clear();
 		this.manager.close();
 	}
@@ -87,7 +87,7 @@ public final class MiniBoard extends JavaPlugin  {
 		return this.configuration;
 	}
 
-	public Set<Score> scores(){
+	public Set<PlayerScore> scores(){
 		return this.scoreboards;
 	}
 
@@ -96,6 +96,9 @@ public final class MiniBoard extends JavaPlugin  {
 	}
 
 	public void reloadConfig(){
-		this.configuration = Configuration.loadMainConfig(this.getDataPath(), this.getSLF4JLogger());
+		this.configuration = Configuration.loadMainConfig(
+			this.getDataPath(),
+			this.getSLF4JLogger()
+		);
 	}
 }

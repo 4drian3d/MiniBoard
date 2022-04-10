@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import me.dreamerzero.miniboard.MiniBoard;
-import me.dreamerzero.miniboard.Score;
+import me.dreamerzero.miniboard.PlayerScore;
 
 public final class JoinListener implements Listener {
     private final MiniBoard plugin;
@@ -15,6 +15,6 @@ public final class JoinListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onjoin(final PlayerJoinEvent event) {
-        plugin.scores().add(new Score(event.getPlayer(), plugin));
+        plugin.scores().add(new PlayerScore(event.getPlayer(), plugin));
     }
 }

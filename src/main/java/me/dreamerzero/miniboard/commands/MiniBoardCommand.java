@@ -8,11 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import me.dreamerzero.miniboard.MiniBoard;
+import me.dreamerzero.miniboard.PlayerScore;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public final class MiniBoardCommand implements CommandExecutor {
     private final MiniBoard plugin;
-    public MiniBoardCommand(MiniBoard plugin) {
+    public MiniBoardCommand(final MiniBoard plugin) {
         this.plugin = plugin;
     }
 
@@ -22,7 +23,7 @@ public final class MiniBoardCommand implements CommandExecutor {
         return switch(args.length){
             case 0 -> {
                 sender.sendMessage(MiniMessage.miniMessage().deserialize(
-                    "<gradient:red:aqua>MiniBoard</gradient> | <aqua>by <gradient>4drian3d"
+                    "<gradient:red:aqua>MiniBoard</gradient> | <aqua>by <rainbow:!>4drian3d"
                 ));
                 yield true;
             }
@@ -31,15 +32,16 @@ public final class MiniBoardCommand implements CommandExecutor {
                     case "reload" -> {
                         if(sender.hasPermission("miniboard.command.reload")) {
                             plugin.reloadConfig();
+                            plugin.scores().forEach(PlayerScore::reload);
                             yield true;
                         }
                         yield false;
                     }
                     case "toggle" -> {
                         if(sender.hasPermission("miniboard.command.toggle")) {
-                            for(var score : plugin.scores()) {
+                            for(PlayerScore score : plugin.scores()) {
                                 if(score.player().equals(sender)) {
-                                    score.state(true);
+                                    score.toggleState();
                                     yield true;
                                 }
                             }

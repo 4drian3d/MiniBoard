@@ -2,6 +2,7 @@ package me.dreamerzero.miniboard.configuration;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -43,6 +44,18 @@ public final class Configuration {
             "<gradient:#FF0000:white:red>||||||||||||||||</gradient>",
             "<gradient:aqua:white>play.yourserver.com"
         );
+        private Map<String, WorldBundle> worldScores = Map.of(
+            "world-the-nether",
+            new WorldBundle(
+                "<rainbow>Miniboard</rainbow>",
+                List.of(
+                    "<green>This server is using MiniBoard",
+                    "OMG, WORLD SCOREBOARDS!!!!!!!!!!!!",
+                    "<gradient:#FF0000:white:red>||||||||||||||||</gradient>",
+                    "<gradient:aqua:white>play.yourserver.com"
+                )
+            )
+        );
         private long updateInterval = 100l;
 
         public String title() {
@@ -55,6 +68,10 @@ public final class Configuration {
 
         public long updateInterval(){
             return this.updateInterval;
+        }
+
+        public Map<String, WorldBundle> worldScores() {
+            return this.worldScores;
         }
     }
 }

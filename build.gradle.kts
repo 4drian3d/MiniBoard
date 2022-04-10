@@ -42,15 +42,14 @@ bukkit {
     )
 
     commands {
-        register("miniboard") {
-            
-        }
+        register("miniboard") {}
     }
 }
 
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
+        options.compilerArgs.add("--enable-preview")
 
         options.release.set(17)
     }
