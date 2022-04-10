@@ -7,21 +7,29 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
-public class MiniPlaceholdersFormatter implements Formatter {
+public class MiniPlaceholdersFormatter extends Formatter {
+
+
+    public MiniPlaceholdersFormatter(Player player) {
+        super(TagResolver.resolver(
+            MiniPlaceholders.getGlobalPlaceholders(),
+            MiniPlaceholders.getAudiencePlaceholders(player)
+        ));
+    }
 
     @Override
-    public Component format(Player player, String string) {
+    public Component format(String string) {
         return MiniMessage.miniMessage().deserialize(
             string,
-            MiniPlaceholders.getAudiencePlaceholders(player)
+            this.playerResolver
         );
     }
 
     @Override
-    public Component format(Player player, String string, TagResolver additionalResolver) {
+    public Component format(String string, TagResolver additionalResolver) {
         return MiniMessage.miniMessage().deserialize(
             string,
-            MiniPlaceholders.getAudiencePlaceholders(player),
+            this.playerResolver,
             additionalResolver
         );
     }

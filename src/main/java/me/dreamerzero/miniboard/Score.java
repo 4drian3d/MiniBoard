@@ -8,7 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import me.dreamerzero.miniboard.enums.FormatType;
+import me.dreamerzero.miniboard.formatter.Formatter;
+import me.dreamerzero.miniboard.formatter.MiniPlaceholdersFormatter;
+import me.dreamerzero.miniboard.formatter.RegularFormatter;
 import net.megavex.scoreboardlibrary.api.sidebar.Sidebar;
 
 public final class Score {
@@ -16,6 +19,7 @@ public final class Score {
     private final Sidebar sidebar;
     private final Player player;
     private final BukkitTask task;
+    private final Formatter formatter;
 
     public Score(@NotNull final Player player, @NotNull MiniBoard miniBoard){
         this.miniBoard = miniBoard;
@@ -29,15 +33,23 @@ public final class Score {
             miniBoard.config().updateInterval()
         );
         this.sidebar.addPlayer(player);
+        this.formatter = miniBoard.formatter() == FormatType.MINIPLACEHOLDERS
+            ? new MiniPlaceholdersFormatter(player)
+            : new RegularFormatter();
+        sidebar.visible(true);
+    }
+
+    public void state(boolean state){
+        sidebar.visible(state);
     }
 
     public void updateLines(){
         List<String> lines = miniBoard.config().lines();
         Objects.checkIndex(lines.size(), 15);
         for(int i = 0; i < lines.size(); i++) {
-            sidebar.line(i, MiniMessage.miniMessage().deserialize(lines.get(i)));
+            sidebar.line(i, formatter.format(lines.get(i)));
         }
-        sidebar.title(MiniMessage.miniMessage().deserialize(lines.get(1)));
+        sidebar.title(formatter.format(lines.get(1)));
     }
 
     public void destroy(){
