@@ -23,82 +23,82 @@ import net.megavex.scoreboardlibrary.api.ScoreboardManager;
 import net.megavex.scoreboardlibrary.exception.ScoreboardLibraryLoadException;
 
 public final class MiniBoard extends JavaPlugin  {
-	private ScoreboardManager manager;
-	private final Set<PlayerScore> scoreboards = new HashSet<>();
-	private Configuration.Config configuration;
-	private FormatType formatType;
+    private ScoreboardManager manager;
+    private final Set<PlayerScore> scoreboards = new HashSet<>();
+    private Configuration.Config configuration;
+    private FormatType formatType;
 
-	@Override
-	public void onEnable() {
-		this.reloadConfig();
-		try {
-			ScoreboardLibraryImplementation.init();
-		} catch (ScoreboardLibraryLoadException e) {
-			e.printStackTrace();
-			this.getServer().getPluginManager().disablePlugin(this);
-			return;
-		}
-		this.formatType = this.getServer().getPluginManager().isPluginEnabled("miniplaceholders-paper")
-			? FormatType.MINIPLACEHOLDERS
-			: FormatType.REGULAR;
-		this.manager = ScoreboardManager.scoreboardManager(this);
+    @Override
+    public void onEnable() {
+        this.reloadConfig();
+        try {
+            ScoreboardLibraryImplementation.init();
+        } catch (ScoreboardLibraryLoadException e) {
+            e.printStackTrace();
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        this.formatType = this.getServer().getPluginManager().isPluginEnabled("miniplaceholders-paper")
+            ? FormatType.MINIPLACEHOLDERS
+            : FormatType.REGULAR;
+        this.manager = ScoreboardManager.scoreboardManager(this);
 
-		this.getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-		this.getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
-		this.getServer().getPluginManager().registerEvents(new WorldChangeListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new WorldChangeListener(this), this);
 
-		PluginCommand miniBoardCommand = this.getServer().getPluginCommand("miniboard");
-		miniBoardCommand.permissionMessage(MiniMessage.miniMessage()
-			.deserialize("You cannot execute this command"));
-		miniBoardCommand.setExecutor(new MiniBoardCommand(this));
-		miniBoardCommand.setPermission("miniboard.command");
-		miniBoardCommand.setDescription("MiniBoard main command");
+        PluginCommand miniBoardCommand = this.getServer().getPluginCommand("miniboard");
+        miniBoardCommand.permissionMessage(MiniMessage.miniMessage()
+            .deserialize("You cannot execute this command"));
+        miniBoardCommand.setExecutor(new MiniBoardCommand(this));
+        miniBoardCommand.setPermission("miniboard.command");
+        miniBoardCommand.setDescription("MiniBoard main command");
 
-		// This plugin only supports 1.18.2+ versions... brigadier already exists since 1.13
-		Commodore commodore = CommodoreProvider.getCommodore(this);
-		this.setCompletions(commodore, miniBoardCommand);
-	}
+        // This plugin only supports 1.18.2+ versions... brigadier already exists since 1.13
+        Commodore commodore = CommodoreProvider.getCommodore(this);
+        this.setCompletions(commodore, miniBoardCommand);
+    }
 
-	private void setCompletions(Commodore commodore, PluginCommand command) {
-		commodore.register(command,
-			LiteralArgumentBuilder.literal("miniboard")
-				.then(LiteralArgumentBuilder.literal("reload").build())
-				.then(LiteralArgumentBuilder.literal("toggle").build())
-			.build()
-		);
-	}
+    private void setCompletions(Commodore commodore, PluginCommand command) {
+        commodore.register(command,
+            LiteralArgumentBuilder.literal("miniboard")
+                .then(LiteralArgumentBuilder.literal("reload").build())
+                .then(LiteralArgumentBuilder.literal("toggle").build())
+            .build()
+        );
+    }
 
-	public Path getDataPath(){
-		return this.getDataFolder().toPath();
-	}
+    public Path getDataPath(){
+        return this.getDataFolder().toPath();
+    }
 
-	@Override
-	public void onDisable() {
-		this.scoreboards.forEach(PlayerScore::destroy);
-		this.scoreboards.clear();
-		this.manager.close();
-	}
+    @Override
+    public void onDisable() {
+        this.scoreboards.forEach(PlayerScore::destroy);
+        this.scoreboards.clear();
+        this.manager.close();
+    }
 
-	public ScoreboardManager manager() {
-		return this.manager;
-	}
+    public ScoreboardManager manager() {
+        return this.manager;
+    }
 
-	public Configuration.Config config() {
-		return this.configuration;
-	}
+    public Configuration.Config config() {
+        return this.configuration;
+    }
 
-	public Set<PlayerScore> scores(){
-		return this.scoreboards;
-	}
+    public Set<PlayerScore> scores(){
+        return this.scoreboards;
+    }
 
-	public FormatType formatter() {
-		return this.formatType;
-	}
+    public FormatType formatter() {
+        return this.formatType;
+    }
 
-	public void reloadConfig(){
-		this.configuration = Configuration.loadMainConfig(
-			this.getDataPath(),
-			this.getSLF4JLogger()
-		);
-	}
+    public void reloadConfig(){
+        this.configuration = Configuration.loadMainConfig(
+            this.getDataPath(),
+            this.getSLF4JLogger()
+        );
+    }
 }

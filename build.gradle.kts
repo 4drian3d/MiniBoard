@@ -9,14 +9,14 @@ plugins {
 
 repositories {
     mavenCentral()
-	maven("https://jitpack.io/")
+    maven("https://jitpack.io/")
     maven("https://papermc.io/repo/repository/maven-public/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     shadow("com.github.MegavexNetwork.scoreboard-library:v1_18_R2:-SNAPSHOT")
-	shadow("com.github.MegavexNetwork.scoreboard-library:implementation:-SNAPSHOT")
+    shadow("com.github.MegavexNetwork.scoreboard-library:implementation:-SNAPSHOT")
     shadow("me.lucko:commodore:1.13")
     compileOnly("org.spongepowered:configurate-hocon:4.1.2")
     compileOnly("com.github.4drian3d:MiniPlaceholders:1.0.0")
