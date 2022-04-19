@@ -10,6 +10,8 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
+import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 public final class Configuration {
     private Configuration(){}
@@ -38,39 +40,41 @@ public final class Configuration {
 
     @ConfigSerializable
     public static class Config {
-        private String title = "<rainbow>Miniboard</rainbow>";
-        private List<String> lines = List.of(
-            "<green>This server is using MiniBoard",
-            "<gradient:#FF0000:white:red>||||||||||||||||</gradient>",
-            "<gradient:aqua:white>play.yourserver.com"
+        @Comment("""
+            Default Scoreboard
+            This scoreboard will be displayed if no scoreboard has been assigned
+            to the world in which the player is located""")
+        @Setting(value = "default-scoreboard")
+        private ScoreBundle defaultScoreboard = new ScoreBundle(
+            "<rainbow>Miniboard",
+            List.of(
+                "<green>This server is using MiniBoard",
+                "<gradient:#FF0000:white:red>||||||||||||||||",
+                "<gradient:aqua:white>play.yourserver.com"
+            ),
+            100
         );
-        private Map<String, WorldBundle> worldScores = Map.of(
-            "world-the-nether",
-            new WorldBundle(
+        @Comment("World Scoreboards")
+        @Setting(value = "world-scoreboards")
+        private Map<String, ScoreBundle> worldScores = Map.of(
+            "world_nether",
+            new ScoreBundle(
                 "<rainbow>Miniboard</rainbow>",
                 List.of(
                     "<green>This server is using MiniBoard",
-                    "OMG, WORLD SCOREBOARDS!!!!!!!!!!!!",
+                    "<gradient:red:yellow>OMG, WORLD SCOREBOARDS!!!!!!!!!!!!",
                     "<gradient:#FF0000:white:red>||||||||||||||||</gradient>",
                     "<gradient:aqua:white>play.yourserver.com"
-                )
+                ),
+                100
             )
         );
-        private long updateInterval = 100l;
 
-        public String title() {
-            return this.title;
+        public ScoreBundle defaultScoreBoard() {
+            return this.defaultScoreboard;
         }
 
-        public List<String> lines(){
-            return this.lines;
-        }
-
-        public long updateInterval(){
-            return this.updateInterval;
-        }
-
-        public Map<String, WorldBundle> worldScores() {
+        public Map<String, ScoreBundle> worldScores() {
             return this.worldScores;
         }
     }

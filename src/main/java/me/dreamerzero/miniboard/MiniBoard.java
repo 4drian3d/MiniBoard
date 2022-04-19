@@ -7,7 +7,9 @@ import java.util.Set;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import me.dreamerzero.miniboard.commands.MiniBoardCommand;
 import me.dreamerzero.miniboard.configuration.Configuration;
@@ -108,5 +110,14 @@ public final class MiniBoard extends JavaPlugin  {
 
     private void logToConsole(String string){
         MiniMessage.miniMessage().deserialize(string);
+    }
+
+    public @Nullable PlayerScore scoreByplayer(Player player) {
+        for (PlayerScore score : this.scoreboards) {
+            if (score.player().equals(player)) {
+                return score;
+            }
+        }
+        return null;
     }
 }

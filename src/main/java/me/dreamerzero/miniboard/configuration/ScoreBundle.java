@@ -4,4 +4,4 @@ import java.util.List;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-public record WorldBundle(String title, List<String> lines){}
+public record ScoreBundle(String title, List<String> lines, long updateInterval){}

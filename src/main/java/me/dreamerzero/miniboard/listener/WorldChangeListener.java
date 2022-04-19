@@ -6,23 +6,15 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 import me.dreamerzero.miniboard.MiniBoard;
 import me.dreamerzero.miniboard.PlayerScore;
-import me.dreamerzero.miniboard.configuration.WorldBundle;
 
 public final class WorldChangeListener implements Listener {
     private final MiniBoard plugin;
-    public WorldChangeListener(MiniBoard plugin){
+    public WorldChangeListener(final MiniBoard plugin){
         this.plugin = plugin;
     }
     @EventHandler
-    public void onWorldChange(PlayerChangedWorldEvent event){
-        final WorldBundle bundle = plugin.config().worldScores().get(event.getPlayer().getLocation().getWorld().getName());
-        if(bundle == null) return;
-        for(PlayerScore score : plugin.scores()) {
-            if(score.player().equals(event.getPlayer())) {
-                score.changeLines(bundle);
-                return;
-            }
-        }
-
+    public void onWorldChange(final PlayerChangedWorldEvent event){
+        final PlayerScore score = plugin.scoreByplayer(event.getPlayer());
+        if(score != null) score.reload();
     }
 }

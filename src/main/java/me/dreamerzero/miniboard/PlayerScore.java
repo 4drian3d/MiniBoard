@@ -6,8 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import me.dreamerzero.miniboard.configuration.WorldBundle;
+import me.dreamerzero.miniboard.configuration.ScoreBundle;
 import me.dreamerzero.miniboard.enums.FormatType;
 import me.dreamerzero.miniboard.formatter.Formatter;
 import me.dreamerzero.miniboard.formatter.MiniPlaceholdersFormatter;
@@ -20,11 +21,11 @@ public final class PlayerScore {
     private final Player player;
     private BukkitTask task;
     private Formatter formatter;
-    private WorldBundle actualLines;
+    private ScoreBundle scoreBundle;
 
     public PlayerScore(@NotNull final Player player, @NotNull MiniBoard miniBoard){
-        this.plugin = miniBoard;
-        this.player = player;
+        this.plugin = Objects.requireNonNull(miniBoard, () -> "the plugin cannot be null");
+        this.player = Objects.requireNonNull(player, () -> "the player cannot be null");
         this.sidebar = miniBoard.manager().sidebar(Sidebar.MAX_LINES, player.locale());
         this.sidebar.addPlayer(player);
         sidebar.visible(true);
@@ -39,20 +40,12 @@ public final class PlayerScore {
         sidebar.visible(state);
     }
 
-    public void changeLines(WorldBundle bundle){
-        updateLines(this.actualLines = bundle);
-    }
-
     public void updateLines(){
-        updateLines(actualLines);
-    }
-
-    public void updateLines(WorldBundle bundle){
-        int lines = Objects.checkIndex(bundle.lines().size(), 15);
+        int lines = Objects.checkIndex(this.scoreBundle.lines().size(), 15);
         for(int i = 0; i < lines; i++) {
-            sidebar.line(i, formatter.format(bundle.lines().get(i)));
+            sidebar.line(i, formatter.format(this.scoreBundle.lines().get(i)));
         }
-        sidebar.title(formatter.format(bundle.title()));
+        sidebar.title(formatter.format(this.scoreBundle.title()));
     }
 
     public void destroy(){
@@ -74,26 +67,26 @@ public final class PlayerScore {
     }
 
     public void reload() {
-        final WorldBundle playerWorldBundle = plugin.config().worldScores().get(player.getLocation().getWorld().getName());
-        this.actualLines = playerWorldBundle != null
-            ? new WorldBundle(plugin.config().title(), plugin.config().lines())
-            : playerWorldBundle;
+        final ScoreBundle playerScoreBundle = plugin.config().worldScores().get(player.getLocation().getWorld().getName());
+        this.scoreBundle = playerScoreBundle == null
+            ? plugin.config().defaultScoreBoard()
+            : playerScoreBundle;
         this.formatter = plugin.formatter() == FormatType.MINIPLACEHOLDERS
             ? new MiniPlaceholdersFormatter(player)
             : new RegularFormatter();
         this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(
             plugin,
-            () -> updateLines(),
+            this::updateLines,
             0L,
-            plugin.config().updateInterval()
+            this.scoreBundle.updateInterval()
         );
         this.updateLines();
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(final @Nullable Object o){
         if(o == this) return true;
         if(!(o instanceof PlayerScore)) return false;
-        return this.player.equals(((PlayerScore)o).player());
+        return Objects.equals(this.player, ((PlayerScore)o).player());
     }
 }
